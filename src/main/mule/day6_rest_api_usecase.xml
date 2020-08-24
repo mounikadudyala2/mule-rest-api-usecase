@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd">
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="bd5227a0-e0e1-41a1-ad21-1321c35e034f" >
+		<http:listener-connection host="0.0.0.0" port="8081" />
+	</http:listener-config>
+	<http:request-config name="HTTP_Request_configuration" doc:name="HTTP Request configuration" doc:id="b6a6291d-9523-4cbd-b73a-1d9025bc3984" >
+		<http:request-connection host="reqres.in" port="80" />
+	</http:request-config>
+	<flow name="day6_rest_api_usecaseFlow" doc:id="df7b083e-5d41-4a82-a756-7552039d3e9f" >
+		<http:listener doc:name="Listener" doc:id="b5b4fc72-db22-4fbb-8e72-7b5d9484e9e7" config-ref="HTTP_Listener_config" path="/rest-usecase"/>
+		<set-variable value="#[payload.id]" doc:name="Set Variable" doc:id="6bb2d53f-2128-4c3f-a052-78a0911b9bbd" variableName="userId"/>
+		<logger level="INFO" doc:name="Logger" doc:id="f67ffcb0-2dde-4f84-8b2d-beb401594307" message="#[payload]"/>
+		<http:request method="GET" doc:name="Request" doc:id="9cf35fec-691f-489e-b8fe-2b15df17c3ec" config-ref="HTTP_Request_configuration" path="#['api/users/' ++ vars.userId as String]"/>
+	</flow>
+</mule>
